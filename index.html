@@ -3,20 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>A2 Schedule</title>
+<title>A2 Schedule + Attendance</title>
 <style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f6f3;--card:#fff;--tx:#1d1d1b;--mut:#6b6b66;--ac:#2f5bd8;--bd:#e3e3dd;--now:#e8efff;--brk:#efefe9}
-:root[data-theme="dark"]{--bg:#121316;--card:#1c1e23;--tx:#ecece8;--mut:#9a9a94;--ac:#7c9cff;--bd:#2c2f36;--now:#23315a;--brk:#181a1e}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121316;--card:#1c1e23;--tx:#ecece8;--mut:#9a9a94;--ac:#7c9cff;--bd:#2c2f36;--now:#23315a;--brk:#181a1e}}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f6f3;--card:#fff;--tx:#1d1d1b;--mut:#6b6b66;--ac:#2f5bd8;--bd:#e3e3dd;--now:#e8efff;--brk:#efefe9;--ok:#1f9d55;--bad:#d64545}
+:root[data-theme="dark"]{--bg:#121316;--card:#1c1e23;--tx:#ecece8;--mut:#9a9a94;--ac:#7c9cff;--bd:#2c2f36;--now:#23315a;--brk:#181a1e;--ok:#4cc47f;--bad:#ff7a7a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121316;--card:#1c1e23;--tx:#ecece8;--mut:#9a9a94;--ac:#7c9cff;--bd:#2c2f36;--now:#23315a;--brk:#181a1e;--ok:#4cc47f;--bad:#ff7a7a}}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:520px;margin:0 auto;padding:16px}
+body{margin:0 auto;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;max-width:520px;padding:16px}
 h1{font-size:20px;margin:0}
 .sub{color:var(--mut);font-size:13px;margin:2px 0 14px}
-.tabs{display:flex;gap:8px;margin-bottom:14px}
-.tabs button{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px}
-.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.row{display:flex;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px}
+.tabs,.bt{display:flex;gap:8px;margin-bottom:14px}
+.tabs button,.bt button{flex:1;padding:10px 4px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px}
+.tabs button.on,.bt button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.row{display:flex;gap:12px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px;align-items:center}
 .row.now{background:var(--now);border-color:var(--ac)}
 .row.past{opacity:.5}
 .row.brk{background:var(--brk);padding:8px 12px;font-size:13px;color:var(--mut)}
@@ -25,21 +25,27 @@ h1{font-size:20px;margin:0}
 .m{font-size:12px;color:var(--mut);margin-top:2px}
 .tag{display:inline-block;font-size:10px;background:var(--ac);color:#fff;border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
 .dh{font-size:13px;font-weight:600;color:var(--ac);margin:16px 0 6px}
-.dh.today{text-decoration:underline}
 .note{font-size:12px;color:var(--mut);margin-top:16px}
+.in{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:15px;margin-bottom:10px}
+.chk{cursor:pointer}
+.box{width:24px;height:24px;border:2px solid var(--bd);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.box.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.big{font-size:44px;font-weight:700;line-height:1}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:14px 0 8px}
+.sr{display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-top:1px solid var(--bd)}
 </style>
 </head>
 <body>
 <h1>A2 Schedule</h1>
 <div class="sub" id="sub"></div>
-<div class="tabs"><button id="b1" class="on">Aaj</button><button id="b2">Poora week</button></div>
+<div class="tabs"><button id="b1" class="on">Aaj</button><button id="b2">Week</button><button id="b3">Attendance</button></div>
 <div id="v"></div>
-<div class="note">Div A (305) • Batch A2 • SAE Kondhwa • wef 21/09/2026. Lab rooms timetable se confirm kar lena.</div>
+<div class="note">Div A (305) • Batch A2 • SAE Kondhwa • wef 21/09/2026. Attendance sirf isi browser mein save hoti hai. Lab rooms timetable se confirm kar lena.</div>
 <script>
 var N={PHY:"Engineering Physics",EMI:"Engg Mathematics I",FPL:"Programming Language (FPL)",EG:"Engineering Graphics",BEE:"Basic Electrical Engg",MT:"Maths Tutorial",BEEPr:"BEE Practical",FPLPr:"FPL Practical",DT:"Design Thinking & Idea Lab",EGPr:"Graphics Practical",PhyPr:"Physics Practical",CCC:"Co-Curricular Course I"};
 var T={NPD:"Dr. N.P. Dharmadhikari",SS:"Ms. Shamshad Shaikh",NSG:"Mrs. N.S. Gohel",KCS:"K.C. Salunke",PPJ:"Mrs. P.P. Jadhav",PNC:"Mrs. P.N. Chaudhari",PD:"Mrs. Priti Daware"};
 function m(h,mi){return h*60+mi}
-// [start,end,subject,teacher,room]
 var S={
 1:[[m(9,0),m(10,0),"PHY","NPD","305"],[m(10,0),m(11,0),"EMI","SS","305"],[m(11,15),m(12,15),"FPL","NSG","305"],[m(12,15),m(13,15),"EG","KCS","305"],[m(14,0),m(16,0),"EGPr","KCS","325"]],
 2:[[m(9,0),m(10,0),"EMI","SS","305"],[m(10,0),m(11,0),"FPL","NSG","305"],[m(11,15),m(13,15),"FPLPr","NSG","308"],[m(14,0),m(15,0),"PHY","NPD","305"],[m(15,0),m(16,0),"EG","KCS","305"]],
@@ -50,31 +56,70 @@ var S={
 var BR=[[m(11,0),m(11,15),"Short break"],[m(13,15),m(13,45),"Lunch break"]];
 var DN=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function f(x){var h=Math.floor(x/60),mi=x%60;return h+":"+(mi<10?"0":"")+mi}
+function p2(x){return x<10?"0"+x:""+x}
+function ds(d){return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
+function pd(s){var a=s.split("-");return new Date(+a[0],a[1]-1,+a[2])}
+// storage: D[date]={c:1,a:[1,0,..]} college tha | {c:0} college nahi tha
+var K="a2att",D={};
+try{D=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){D={}}
+function sv(){try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}}
+var mode=1,ad=ds(new Date());
 function row(e,now,isToday){
  var c="row";if(isToday){if(now>=e[0]&&now<e[1])c+=" now";else if(now>=e[1])c+=" past"}
  var tag=(isToday&&now>=e[0]&&now<e[1])?'<span class="tag">ABHI</span>':"";
  var pr=/Pr$/.test(e[2])?" \u2022 Lab":"";
  return '<div class="'+c+'"><div class="t">'+f(e[0])+" – "+f(e[1])+'</div><div><div class="n">'+N[e[2]]+tag+'</div><div class="m">'+T[e[3]]+(e[4]?" \u2022 Room "+e[4]:"")+pr+'</div></div></div>'}
 function day(d,now,isToday){
- var L=S[d],items=L.map(function(e){return{s:e[0],h:row(e,now,isToday)}});
+ var items=S[d].map(function(e){return{s:e[0],h:row(e,now,isToday)}});
  BR.forEach(function(b){items.push({s:b[0],h:'<div class="row brk"><div class="t">'+f(b[0])+" – "+f(b[1])+"</div><div>"+b[2]+"</div></div>"})});
  items.sort(function(a,b){return a.s-b.s});
  return items.map(function(i){return i.h}).join("")}
-var mode=1;
+function pct(p,t){return t?Math.round(p*1000/t)/10:0}
+function need(p,t){var r=.75;if(!t)return"";
+ if(p/t>=r)return "Abhi "+Math.floor(p/r-t+1e-9)+" lecture skip kar sakta hai, 75% safe rahega.";
+ return "75% ke liye aur "+Math.ceil((r*t-p)/(1-r)-1e-9)+" lecture lagatar attend karne padenge."}
+function mark(v){var wd=pd(ad).getDay();
+ if(v==-1)delete D[ad];
+ else if(v==0)D[ad]={c:0};
+ else if(!(D[ad]&&D[ad].c==1))D[ad]={c:1,a:S[wd].map(function(){return 1})};
+ sv();render()}
+function tog(i){D[ad].a[i]=D[ad].a[i]?0:1;sv();render()}
+function att(){
+ var wd=pd(ad).getDay(),r=D[ad],h='<input type="date" class="in" min="2026-09-21" value="'+ad+'" onchange="ad=this.value||ds(new Date());render()">';
+ h+='<div class="sub">'+DN[wd]+'</div>';
+ if(wd==0||wd==6)h+='<div class="row brk">Weekend hai, koi lecture nahi.</div>';
+ else{
+  h+='<div class="bt"><button class="'+(r&&r.c==1?"on":"")+'" onclick="mark(1)">College tha</button><button class="'+(r&&r.c==0?"on":"")+'" onclick="mark(0)">Nahi tha</button><button onclick="mark(-1)">Clear</button></div>';
+  if(r&&r.c==1){
+   h+='<div class="sub">Jo lecture attend kiya us pe tick rakh, miss wale pe hata de.</div>';
+   S[wd].forEach(function(e,i){var on=r.a[i];
+    h+='<div class="row chk" onclick="tog('+i+')"><div class="box'+(on?" on":"")+'">'+(on?"\u2713":"")+'</div><div><div class="n">'+N[e[2]]+'</div><div class="m">'+f(e[0])+" – "+f(e[1])+'</div></div></div>'})}
+  else if(r)h+='<div class="row brk">Is din college nahi tha, ginti mein nahi aayega.</div>'}
+ var tp=0,tt=0,cd=0,sp={},st={};
+ Object.keys(D).forEach(function(k){var x=D[k];if(x.c!=1)return;cd++;var w=pd(k).getDay();
+  (S[w]||[]).forEach(function(e,i){var c=e[2];st[c]=(st[c]||0)+1;tt++;if(x.a[i]){sp[c]=(sp[c]||0)+1;tp++}})});
+ var P=pct(tp,tt);
+ h+='<div class="card"><div class="sub">Overall attendance • '+cd+' college din</div><div class="big '+(tt&&P<75?"bad":"ok")+'">'+(tt?P+"%":"–")+'</div><div class="m" style="margin-top:8px">'+tp+' / '+tt+' lecture. '+need(tp,tt)+'</div></div>';
+ var ks=Object.keys(st);
+ if(ks.length){h+='<div class="card">';ks.forEach(function(c){var q=sp[c]||0,z=pct(q,st[c]);
+  h+='<div class="sr"><span>'+N[c]+'</span><span class="'+(z<75?"bad":"ok")+'">'+q+'/'+st[c]+' • '+z+'%</span></div>'});h+='</div>'}
+ return h}
 function render(){
  var d=new Date(),wd=d.getDay(),now=d.getHours()*60+d.getMinutes(),h="";
  document.getElementById("sub").textContent=DN[wd]+", "+d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+ for(var j=1;j<=3;j++)document.getElementById("b"+j).className=mode==j?"on":"";
  if(mode==1){
   var show=wd,isT=true,lbl="";
   if(wd==0||wd==6){show=1;isT=false;lbl="Aaj chhutti hai \ud83c\udf89 Monday ka schedule:"}
   else if(now>=m(16,0)){show=wd==5?1:wd+1;isT=false;lbl="Aaj ke lectures khatam. "+DN[show]+" ka schedule:"}
   if(lbl)h+='<div class="sub">'+lbl+"</div>";
-  h+=day(show,now,isT)}
- else{for(var i=1;i<=5;i++)h+='<div class="dh'+(i==wd?" today":"")+'">'+DN[i]+(i==wd?" (aaj)":"")+"</div>"+day(i,now,false)}
+  h+=day(show,now,isT);
+  if(wd>0&&wd<6){var r=D[ds(d)];h+='<div class="bt"><button onclick="ad=ds(new Date());mode=3;render()">'+(r?(r.c?"Aaj ki attendance edit karo":"Aaj: college nahi tha"):"Aaj ki attendance mark karo")+'</button></div>'}}
+ else if(mode==2){for(var i=1;i<=5;i++)h+='<div class="dh">'+DN[i]+(i==wd?" (aaj)":"")+"</div>"+day(i,now,false)}
+ else h=att();
  document.getElementById("v").innerHTML=h}
-document.getElementById("b1").onclick=function(){mode=1;this.className="on";document.getElementById("b2").className="";render()};
-document.getElementById("b2").onclick=function(){mode=2;this.className="on";document.getElementById("b1").className="";render()};
-render();setInterval(render,60000);
+[1,2,3].forEach(function(j){document.getElementById("b"+j).onclick=function(){mode=j;render()}});
+render();setInterval(function(){if(mode!=3)render()},60000);
 </script>
 </body>
 </html>
